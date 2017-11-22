@@ -260,22 +260,58 @@ var computerModule = (function(){
 			}	
 		}
 		else
-			return null;
+			setTimeout(() => resetIt("none"),500);
+	}
+
+	function resetIt(whoWon) {
+		var getPlayDiv = document.getElementById("playDiv");
+		playDiv.style.display = "none";
+		var wonDiv = document.getElementById("whoWon");
+		wonDiv.style.display = "inline-block";
+		var p = document.querySelector(".won");
+		if(whoWon === "Player")
+			p.innerHTML = "You Won!";
+		else if(whoWon === "Computer")
+			p.innerHTML = "Bad Luck. Computer Won!";
+		else
+			p.innerHTML = "Draw!";
+
+		arr= [[ , , ],[ , , ],[ , , ]];
+		flagArr= [[0,0,0],[0,0,0],[0,0,0]];
+
+		var tiles = document.querySelectorAll("td");
+		tiles.forEach(function(el){
+			el.innerHTML= "  ";
+		});
+
+		var restart = document.querySelector(".restart");
+		console.log(restart);
+		restart.addEventListener("click",function(){
+			console.log("in here");
+			var wonDiv = document.getElementById("whoWon");
+			wonDiv.style.display = "none";
+			var getPlayDiv = document.getElementById("playAs");
+			getPlayDiv.style.display = "inline-block";
+		});
+
+		//startGame();
 	}
 
 	return {
 		changeSign : changeSign,
-		generateRandomPos : generateRandomPos
+		generateRandomPos : generateRandomPos,
+		resetIt : resetIt
 	}
 
 })();
 
+var arr= [[ , , ],[ , , ],[ , , ]];
+var flagArr= [[0,0,0],[0,0,0],[0,0,0]];
+
 var startGame = function() {
 	var playerSign;
 	var sign = document.querySelectorAll(".sign");
-	var arr= [[ , , ],[ , , ],[ , , ]];
-    var flagArr= [[0,0,0],[0,0,0],[0,0,0]];
-
+	
 	function getTheSign(s){						// Getting the initial sign
 		var playSign=s.id;
 		var getSignDiv = document.getElementById("playAs");
@@ -320,6 +356,7 @@ var startGame = function() {
 		if(playerWon === "You Won")
 		{
 			console.log("Player Won");
+			setTimeout(() => computerModule.resetIt("Player"),500);
 		}
 		else
 		{
@@ -354,12 +391,13 @@ var startGame = function() {
 				{
 					console.log("Computer Won");
 					pos=null;
+					setTimeout(()=>computerModule.resetIt("Computer"),500);
 				}
 				playerSign = computerModule.changeSign(playerSign); 	//change the sign again
 			}
 		}
 
-	} 	
+	} 
 
 };
 
